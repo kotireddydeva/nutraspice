@@ -44,6 +44,8 @@ const Shop = () => {
     fetchProducts();
   }, []);
 
+
+
   return (
     <div className="max-w-[90%] mx-auto py-8">
       <h2 className="text-3xl font-bold mb-6 text-center">All Products</h2>

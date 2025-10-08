@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { BiMenu, BiX } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import { CartContext } from "../../context/CartContext";
 
 const Header = () => {
+    const {cartItems} = useContext(CartContext)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     return (
         <header className="bg-indigo-700 relative mb-5">
@@ -14,6 +16,7 @@ const Header = () => {
                         <li><Link to="/shop">Shop</Link></li>
                         <li>About</li>
                         <li>Contact</li>
+                        <li>Cart {cartItems.length > 0 && cartItems.length}</li>
                         <li>Login</li>
                     </ul>
                 </nav>
