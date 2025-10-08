@@ -21,7 +21,7 @@ const Header = () => {
                     {isMenuOpen ? <BiX /> : <BiMenu />}
                 </button>
                 {isMenuOpen &&
-                    <nav className="absolute p-2 right-0 top-14 bg-indigo-700 text-white md:hidden">
+                    <nav className="absolute p-2 right-0 top-14 bg-indigo-700 text-white md:hidden z-10">
                         <ul className="font-bold px-5">
                             <li>Home</li>
                             <li>Shop</li>
