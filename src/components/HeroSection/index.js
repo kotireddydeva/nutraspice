@@ -1,6 +1,7 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => {
     const sliderData = [
@@ -44,12 +45,14 @@ const HeroSection = () => {
                 <Slider {...settings}>
                     {sliderData.map((s) =>
                         <div key={s.id}>
+                            <Link to="/shop">
                             <div className="md:hidden">
                                 <img className="mx-auto" src={s.imgUrl} alt={s.name} />
                             </div>
                             <div className="hidden md:block">
                                 <img className="mx-auto w-full" src={s.imgMd} alt={s.name} />
                             </div>
+                            </Link>
                         </div>
                     )}
                 </Slider>
