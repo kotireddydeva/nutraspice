@@ -34,7 +34,7 @@ const Categories = () => {
             >
               <img className="group-hover:scale-125 duration-500" src={item.imgUrl} alt={item.name} />
             </div>
-            <button className="mt-3 font-bold">Shop Now</button>
+            <button className="mt-3 font-bold">{item.name}</button>
             
           </div>
           </Link>
