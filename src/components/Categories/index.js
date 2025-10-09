@@ -4,7 +4,7 @@ const Categories = () => {
   const categoriesData = [
     { name: "Cashew", id:"cashew", hoverColor: "hover:bg-indigo-200", imgUrl: 'https://res.cloudinary.com/dyz8l9er0/image/upload/v1759926017/cashew_nut_cso3ca.png' },
     { name: "Almond", id:"almond", hoverColor: "hover:bg-green-200", imgUrl: 'https://res.cloudinary.com/dyz8l9er0/image/upload/v1759926657/almond_qaddl9.png'  },
-    { name: "Pepper", id:"pepper", hoverColor: "hover:bg-red-200", imgUrl: 'https://res.cloudinary.com/dyz8l9er0/image/upload/v1759926557/pepper_icon_fxcsop.png'  },
+    { name: "Pepper", id:"pepper", hoverColor: "hover:bg-red-200", imgUrl: 'https://res.cloudinary.com/dyz8l9er0/image/upload/v1759991668/black_pepper_fge7qk.png'  },
     { name: "Ilachi", id:"ilachi", hoverColor: "hover:bg-yellow-200", imgUrl: 'https://res.cloudinary.com/dyz8l9er0/image/upload/v1759926561/cardamom_xib7pk.png'  },
     { name: "Cinnamon", id:"cinnamon", hoverColor: "hover:bg-orange-200", imgUrl: 'https://res.cloudinary.com/dyz8l9er0/image/upload/v1759926565/cinnamon_qdwlna.png'  },
     { name: "Clove", id:"clove", hoverColor: "hover:bg-purple-200", imgUrl: 'https://res.cloudinary.com/dyz8l9er0/image/upload/v1759926565/clove_icon_wsjnkv.png'  },

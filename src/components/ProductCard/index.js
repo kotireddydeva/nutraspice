@@ -20,7 +20,7 @@ const ProductCard = ({ product }) => {
           className="h-48 object-cover rounded block mx-auto"
         />
         <h3 className="mt-2 font-semibold text-lg">{product.name}</h3>
-        <p className="mt-1 text-blue-600 font-bold">${product.price}</p>
+        <p className="mt-1 text-blue-600 font-bold">Rs. {product.price}/-</p>
       </Link>
       
       {
