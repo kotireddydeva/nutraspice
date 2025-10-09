@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { BiMenu, BiX } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { CartContext } from "../../context/CartContext";
@@ -6,6 +6,20 @@ import { CartContext } from "../../context/CartContext";
 const Header = () => {
     const { cartItems } = useContext(CartContext)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const menuRef = useRef(null);
+    useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+  const onMenuCLick = () => {
+    setIsMenuOpen(false);
+  }
+
     return (
         <header className="bg-indigo-700 relative mb-5">
             <div className="max-w-[90%] mx-auto">
@@ -29,11 +43,15 @@ const Header = () => {
                         {isMenuOpen ? <BiX /> : <BiMenu />}
                     </button>
                     {isMenuOpen &&
-                        <nav className="absolute p-2 right-0 top-14 bg-indigo-700 text-white md:hidden z-10">
+                        <nav 
+                        ref={menuRef}
+                        className="absolute p-2 right-0 top-14 bg-indigo-700 
+                        text-white md:hidden z-10"
+                        >
                             <ul className="font-bold px-5">
-                                <li><Link to="/">Home</Link></li>
-                                <li><Link to="/shop">Shop</Link></li>
-                                <li><Link to="/cart">Cart {cartItems.length > 0 && cartItems.length}</Link></li>
+                                <li><Link to="/" onClick={onMenuCLick}>Home</Link></li>
+                                <li><Link to="/shop" onClick={onMenuCLick}>Shop</Link></li>
+                                <li><Link to="/cart" onClick={onMenuCLick}>Cart {cartItems.length > 0 && cartItems.length}</Link></li>
                                 <li>Login</li>
                                 <li>About</li>
                                 <li>Contact</li>

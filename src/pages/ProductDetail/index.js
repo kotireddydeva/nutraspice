@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { CartContext } from "../../context/CartContext";
 
 const ProductDetails = () => {
+  const { cartItems, setCartItems } = useContext(CartContext);
+  const navigate = useNavigate();
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+    const [qty, setQty] = useState(1);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -286,20 +290,95 @@ const ProductDetails = () => {
     fetchProduct();
   }, [id]);
 
-  if (!product) return <p className="text-center mt-8">Loading...</p>;
+ 
+
+  const existingCartItem = product
+    ? cartItems.find(item => item.id === product.id)
+    : null;
+
+  useEffect(() => {
+    if (existingCartItem) {
+      setQty(existingCartItem.qty);
+    }
+  }, [existingCartItem]);
+
+  const handleAddToCart = () => {
+    setCartItems([...cartItems, { ...product, qty }])
+  }
+
+  const handleRemove = () => {
+    setCartItems(cartItems.filter(item => item.id !== Number(id)))
+  }
+
+  const handleBuyNow = () => {
+    existingCartItem ? navigate('/cart') : setCartItems([...cartItems, {...product, qty}], navigate('/cart'))
+  }
+
+  const handleQty = (e) => {
+    const newQty = Number(e.target.value)
+    setQty(newQty)
+    setCartItems(
+      cartItems.map(item =>
+        item.id === product.id ? { ...item, qty: newQty } : item
+      )
+    )
+  }
+
+   if (!product) return <p className="text-center mt-8">Loading...</p>;
 
   return (
     <div className="max-w-[90%] mx-auto py-8 flex flex-col md:flex-row gap-8">
-      <div className="md:w-1/2">
-        <img src={product.image} alt={product.name} className="w-full rounded" />
+      <div className="md:w-1/4">
+        <img src={product.image} alt={product.name} className="h-56 rounded" />
       </div>
       <div className="md:w-1/2 flex flex-col gap-4">
         <h2 className="text-3xl font-bold">{product.name}</h2>
-        <p className="text-2xl text-blue-600 font-semibold">${product.price}</p>
+        <p className="text-2xl text-blue-600 font-semibold">₹ {product.price}</p>
         <p className="text-gray-700">{product.description}</p>
-        <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition w-40">
-          Add to Cart
-        </button>
+        <div className="flex flex-col flex-wrap gap-5">
+          {existingCartItem ?
+            <div className="flex gap-2 items-center">
+              <button
+                className="mt-3 px-2 bg-red-500 text-white 
+                py-2 rounded hover:bg-red-700 transition w-24"
+                onClick={handleRemove}>
+                Remove
+              </button>
+              <div className="flex items-center mt-3 gap-2">
+                <label htmlFor="quantity" className="mb-1 font-medium text-gray-700">
+                  Quantity
+                </label>
+                <select
+                  value={qty}
+                  id="quantity"
+                  onChange={handleQty}
+                  className="px-3 py-2 border border-gray-300 
+                  rounded-lg text-gray-700 bg-white cursor-pointer 
+                  transition focus:outline-none focus:border-gray-500 
+                  focus:ring-1 focus:ring-gray-500 hover:border-gray-400"
+                >
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                </select>
+              </div>
+
+            </div> :
+            <button
+              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition w-40"
+              onClick={handleAddToCart}
+            >
+              Add to Cart
+            </button>
+          }
+          <button
+              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 transition w-40"
+              onClick={handleBuyNow}
+            >
+              Buy Now
+            </button>
+        </div>
       </div>
     </div>
   );
