@@ -55,9 +55,19 @@ const ProductCard = ({ product }) => {
           className="h-48 object-cover rounded block mx-auto"
         />
         <h3 className="mt-2 font-semibold text-lg">{product.name}</h3>
-        <div className="flex items-center gap- 10">
         <p className="mt-1 text-blue-600 font-bold">₹ {product.price}</p>
-        {existingCartItem && <div className="flex items-center mt-3 gap-3">
+      </Link>
+      <div className="flex flex-col items-start flex-wrap gap-2">
+        {
+          existingCartItem ?
+            <div className="flex gap-2 items-center">
+              <button
+                className="mt-3 px-2 bg-blue-500 text-white 
+                py-2 rounded hover:bg-blue-700 transition w-24"
+                onClick={handleGotoCart}>
+                Go to Cart
+              </button>
+              <div className="flex items-center mt-3 gap-3">
                 <div className="flex items-center gap-2 px-3 py-1">
                   <button
                     onClick={handleDecrement}
@@ -78,22 +88,6 @@ const ProductCard = ({ product }) => {
                   </button>
                 </div>
               </div>
-              
-
-        }
-        </div>
-      </Link>
-      <div className="flex flex-col items-start flex-wrap gap-2">
-        {
-          existingCartItem ?
-            <div className="flex gap-2 items-center">
-              <button
-                className="mt-3 px-2 bg-blue-500 text-white 
-                py-2 rounded hover:bg-blue-700 transition w-24"
-                onClick={handleGotoCart}>
-                Go to Cart
-              </button>
-              
 
             </div> :
             <button
