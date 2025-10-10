@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { CartContext } from "../../context/CartContext";
 import { Link } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
@@ -6,9 +6,39 @@ import { BsCart4 } from "react-icons/bs";
 
 const Cart = () => {
     const { cartItems, setCartItems } = useContext(CartContext)
+    const [showModal, setShowModal] = useState(false)
+    const [deleteId, setDeleteId] = useState(null);
     const handleRemove = (id) => {
         setCartItems(cartItems.filter(item => item.id !== id))
+        setShowModal(false)
     }
+    const consifrmDelete = () => (
+
+        <div className="fixed inset-0 flex items-center 
+        justify-center bg-black bg-opacity-50"
+        >
+            <div className="bg-white p-6 rounded-xl shadow-lg text-center">
+                <p className="text-lg mb-4 font-semibold">Are you sure you want to delete this item?</p>
+                <div className="flex justify-center gap-4">
+                    <button 
+                    onClick={() => handleRemove(deleteId)}
+                    className="bg-red-500 text-white px-4 py-2 
+                    rounded hover:bg-red-600 transition"
+                    >
+                        Yes
+                    </button>
+                    <button 
+                    onClick={() => setShowModal(false)}
+                    className="bg-gray-300 text-black px-4 py-2 
+                    rounded hover:bg-gray-400 transition"
+                    >
+                        No
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    )
     const totalItems = cartItems.length
     const totalPrice = cartItems.reduce((accumulator, currentProduct) => {
         return accumulator + currentProduct.price * currentProduct.qty
@@ -40,7 +70,7 @@ const Cart = () => {
                                         <button
                                             type="button"
                                             className="sm:hidden"
-                                            onClick={() => handleRemove(item.id)}
+                                            onClick={() => {setDeleteId(item.id);setShowModal(true)}}
                                         >
                                             <MdDelete className="text-red-500 hover:text-red-700 text-xl" />
                                         </button>
@@ -52,7 +82,7 @@ const Cart = () => {
                                         <button
                                             type="button"
                                             className="hidden sm:block"
-                                            onClick={() => handleRemove(item.id)}
+                                            onClick={() => {setDeleteId(item.id);setShowModal(true)}}
                                         >
                                             <MdDelete className="text-red-500 hover:text-red-700 text-xl" />
                                         </button>
@@ -108,7 +138,7 @@ const Cart = () => {
 
             }
 
-
+            {showModal && consifrmDelete()}
         </div>
 
     )

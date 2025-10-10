@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { CartContext } from "../../context/CartContext";
+import { CiCirclePlus, CiCircleMinus } from "react-icons/ci";
 
 const ProductDetails = () => {
   const { cartItems, setCartItems } = useContext(CartContext);
   const navigate = useNavigate();
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-    const [qty, setQty] = useState(1);
+  const [qty, setQty] = useState(1);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -290,7 +291,7 @@ const ProductDetails = () => {
     fetchProduct();
   }, [id]);
 
- 
+
 
   const existingCartItem = product
     ? cartItems.find(item => item.id === product.id)
@@ -307,24 +308,41 @@ const ProductDetails = () => {
   }
 
   const handleRemove = () => {
-    setCartItems(cartItems.filter(item => item.id !== Number(id)))
+    setCartItems(cartItems.filter(item => item.id !== Number(id)));
+    setQty(1);
   }
 
   const handleBuyNow = () => {
-    existingCartItem ? navigate('/cart') : setCartItems([...cartItems, {...product, qty}], navigate('/cart'))
+    existingCartItem ? navigate('/cart') : setCartItems([...cartItems, { ...product, qty }], navigate('/cart'))
   }
 
-  const handleQty = (e) => {
-    const newQty = Number(e.target.value)
-    setQty(newQty)
+  const handleIncrement = () => {
+    const newQty = qty + 1;
+    setQty(newQty);
+
     setCartItems(
-      cartItems.map(item =>
+      cartItems.map((item) =>
         item.id === product.id ? { ...item, qty: newQty } : item
       )
-    )
-  }
+    );
+  };
 
-   if (!product) return <p className="text-center mt-8">Loading...</p>;
+  const handleDecrement = () => {
+    const newQty = qty - 1;
+
+    if (newQty <= 0) {
+      setCartItems(cartItems.filter((item) => item.id !== product.id));
+    } else {
+      setQty(newQty);
+      setCartItems(
+        cartItems.map((item) =>
+          item.id === product.id ? { ...item, qty: newQty } : item
+        )
+      );
+    }
+  };
+
+  if (!product) return <p className="text-center mt-8">Loading...</p>;
 
   return (
     <div className="max-w-[90%] mx-auto py-8 flex flex-col md:flex-row gap-8">
@@ -344,24 +362,26 @@ const ProductDetails = () => {
                 onClick={handleRemove}>
                 Remove
               </button>
-              <div className="flex items-center mt-3 gap-2">
-                <label htmlFor="quantity" className="mb-1 font-medium text-gray-700">
-                  Quantity
-                </label>
-                <select
-                  value={qty}
-                  id="quantity"
-                  onChange={handleQty}
-                  className="px-3 py-2 border border-gray-300 
-                  rounded-lg text-gray-700 bg-white cursor-pointer 
-                  transition focus:outline-none focus:border-gray-500 
-                  focus:ring-1 focus:ring-gray-500 hover:border-gray-400"
-                >
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                </select>
+              <div className="flex items-center mt-3 gap-3">
+                <div className="flex items-center gap-2 px-3 py-1">
+                  <button
+                    onClick={handleDecrement}
+                    className="text-gray-700 hover:text-red-500 transition"
+                  >
+                    <CiCircleMinus className="text-2xl" />
+                  </button>
+
+                  <span className="w-6 text-center font-semibold text-gray-800">
+                    {qty}
+                  </span>
+
+                  <button
+                    onClick={handleIncrement}
+                    className="text-gray-700 hover:text-green-600 transition"
+                  >
+                    <CiCirclePlus className="text-2xl" />
+                  </button>
+                </div>
               </div>
 
             </div> :
@@ -373,11 +393,11 @@ const ProductDetails = () => {
             </button>
           }
           <button
-              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 transition w-40"
-              onClick={handleBuyNow}
-            >
-              Buy Now
-            </button>
+            className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 transition w-40"
+            onClick={handleBuyNow}
+          >
+            Buy Now
+          </button>
         </div>
       </div>
     </div>

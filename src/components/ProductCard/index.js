@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../../context/CartContext";
+import { CiCirclePlus, CiCircleMinus } from "react-icons/ci";
 
 const ProductCard = ({ product }) => {
   const { cartItems, setCartItems } = useContext(CartContext)
@@ -11,21 +12,39 @@ const ProductCard = ({ product }) => {
     setCartItems([...cartItems, { ...product, qty }])
   }
   const handleRemove = () => {
-    setCartItems(cartItems.filter(item => item.id !== product.id))
+    setCartItems(cartItems.filter(item => item.id !== product.id));
+    setQty(1);
   }
   const handleBuyNow = () => {
     existingCartItem ? navigate('/cart') : setCartItems([...cartItems, { ...product, qty }], navigate('/cart'))
   }
 
-  const handleQty = (e) => {
-    const newQty = Number(e.target.value)
-    setQty(newQty)
+  const handleIncrement = () => {
+    const newQty = qty + 1;
+    setQty(newQty);
+
     setCartItems(
-      cartItems.map(item =>
+      cartItems.map((item) =>
         item.id === product.id ? { ...item, qty: newQty } : item
       )
-    )
-  }
+    );
+  };
+
+  const handleDecrement = () => {
+    const newQty = qty - 1;
+
+    if (newQty <= 0) {
+      setCartItems(cartItems.filter((item) => item.id !== product.id));
+    } else {
+      setQty(newQty);
+      setCartItems(
+        cartItems.map((item) =>
+          item.id === product.id ? { ...item, qty: newQty } : item
+        )
+      );
+    }
+  };
+
 
   console.log(cartItems)
   return (
@@ -49,24 +68,26 @@ const ProductCard = ({ product }) => {
                 onClick={handleRemove}>
                 Remove
               </button>
-              <div className="flex items-center mt-3 gap-2">
-                <label htmlFor="quantity" className="mb-1 font-medium text-gray-700">
-                  Quantity
-                </label>
-                <select
-                  value={qty}
-                  id="quantity"
-                  onChange={handleQty}
-                  className="px-3 py-2 border border-gray-300 
-                  rounded-lg text-gray-700 bg-white cursor-pointer 
-                  transition focus:outline-none focus:border-gray-500 
-                  focus:ring-1 focus:ring-gray-500 hover:border-gray-400"
-                >
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                </select>
+              <div className="flex items-center mt-3 gap-3">
+                <div className="flex items-center gap-2 px-3 py-1">
+                  <button
+                    onClick={handleDecrement}
+                    className="text-gray-700 hover:text-red-500 transition"
+                  >
+                    <CiCircleMinus className="text-2xl" />
+                  </button>
+
+                  <span className="w-6 text-center font-semibold text-gray-800">
+                    {qty}
+                  </span>
+
+                  <button
+                    onClick={handleIncrement}
+                    className="text-gray-700 hover:text-green-600 transition"
+                  >
+                    <CiCirclePlus className="text-2xl" />
+                  </button>
+                </div>
               </div>
 
             </div> :
