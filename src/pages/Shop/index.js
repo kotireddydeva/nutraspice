@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "../../components/ProductCard";
+import SearchFilter from "../../components/SearchFilter";
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([])
+  const [searchInput, setSearchInput] = useState('')
+  const [sortBy, setSortBy] = useState('new')
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -40,17 +44,38 @@ const Shop = () => {
       ];
 
       setProducts(data);
+      setFilteredProducts(data);
     };
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    let filtered = products.filter(item =>
+      item.name.toLowerCase().includes(searchInput.toLowerCase())
+    );
+
+
+    if (sortBy === "price-low") filtered.sort((a, b) => a.price - b.price);
+    else if (sortBy === "price-high") filtered.sort((a, b) => b.price - a.price);
+    else if (sortBy === "name-asc") filtered.sort((a, b) => a.name.localeCompare(b.name));
+    else if (sortBy === "name-desc") filtered.sort((a, b) => b.name.localeCompare(a.name));
+    setFilteredProducts(filtered);
+  }, [products, searchInput, sortBy]);
+
 
 
 
   return (
     <div className="max-w-[90%] mx-auto py-8">
       <h2 className="text-3xl font-bold mb-6 text-center">All Products</h2>
+      <SearchFilter 
+      searchInput={searchInput} 
+      setSearchInput={setSearchInput} 
+      sortBy={sortBy}
+      setSortBy={setSortBy}
+      />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>

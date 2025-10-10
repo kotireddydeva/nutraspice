@@ -9,6 +9,7 @@ const Cart = () => {
     const { cartItems, setCartItems } = useContext(CartContext)
     const [showModal, setShowModal] = useState(false)
     const [deleteId, setDeleteId] = useState(null);
+    
     const handleRemove = (id) => {
         setCartItems(cartItems.filter(item => item.id !== id))
         setShowModal(false)
@@ -116,7 +117,7 @@ const Cart = () => {
                                             </Link>
                                             
                                         </div>
-                                        <div className="flex flex-col sm:flex-row items-center sm:gap-6 text-right mt-3 sm:mt-0 w-full sm:w-auto">
+                                        <div className="flex flex-col sm:flex-row items-center text-right mt-3 sm:mt-0 w-full sm:w-auto">
                                             <p className="w-20 text-center text-gray-700 mt-3 sm:mt-0 font-medium">{item.price}</p>
                                             <div className="w-32 flex items-center justify-center gap-2 mt-3 sm:mt-0">
                                                 <button
