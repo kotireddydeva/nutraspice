@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "../../components/ProductCard";
 import SearchFilter from "../../components/SearchFilter";
+import { FiSearch } from "react-icons/fi";
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
@@ -62,23 +63,43 @@ const Shop = () => {
     setFilteredProducts(filtered);
   }, [products, searchInput, sortBy]);
 
-
-
+  const resetFilters = () => {
+    setSearchInput('')
+    setSortBy('new')
+  }
 
   return (
     <div className="max-w-[90%] mx-auto py-8">
       <h2 className="text-3xl font-bold mb-6 text-center">All Products</h2>
-      <SearchFilter 
-      searchInput={searchInput} 
-      setSearchInput={setSearchInput} 
-      sortBy={sortBy}
-      setSortBy={setSortBy}
+      <SearchFilter
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
       />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {filteredProducts.length > 0 ?
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
+          ))}
+        </div>
+        :
+        <div className="w-full flex flex-col items-center justify-center mt-6">
+          <FiSearch className="w-24 h-24 text-gray-300 mb-4 animate-bounce" />
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">No Products Found</h3>
+          <p className="text-gray-500 text-center max-w-xs">
+            Sorry, we couldn't find any products matching your search. Try adjusting your filters or search terms.
+          </p>
+          <button
+          onClick={resetFilters}
+            className="mt-6 px-6 py-2 
+                        bg-blue-500 text-white 
+                        rounded-lg hover:bg-blue-600 transition"
+          >
+            Reset Filters
+          </button>
+        </div>
+      }
     </div>
   );
 };
