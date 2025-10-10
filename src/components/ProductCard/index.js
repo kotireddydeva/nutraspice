@@ -44,6 +44,11 @@ const ProductCard = ({ product }) => {
     }
   };
 
+  const handleRemove = () => {
+    setCartItems(cartItems.filter((item) => item.id !== product.id));
+    setQty(1);
+  }
+
 
   console.log(cartItems)
   return (
@@ -57,53 +62,67 @@ const ProductCard = ({ product }) => {
         <h3 className="mt-2 font-semibold text-lg">{product.name}</h3>
         <p className="mt-1 text-blue-600 font-bold">₹ {product.price}</p>
       </Link>
-      <div className="flex flex-col items-start flex-wrap gap-2">
-        {
-          existingCartItem ?
-            <div className="flex gap-2 items-center">
+      <div className="flex flex-col items-center justify-center gap-3 mt-4">
+        {existingCartItem ? (
+          <div className="flex flex-col items-center gap-3">
+            <div className="flex gap-3 w-full justify-center">
               <button
-                className="mt-3 px-2 bg-blue-500 text-white 
-                py-2 rounded hover:bg-blue-700 transition w-24"
-                onClick={handleGotoCart}>
+                onClick={handleRemove}
+                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition w-28 text-sm font-medium"
+              >
+                Remove
+              </button>
+              <div className="flex items-center justify-center bg-gray-100 rounded-full px-4 py-2 shadow-sm">
+                <button
+                  onClick={handleDecrement}
+                  className="text-gray-600 hover:text-red-500 transition"
+                >
+                  <CiCircleMinus className="text-2xl" />
+                </button>
+                <span className="w-8 text-center font-semibold text-gray-800">
+                  {qty}
+                </span>
+                <button
+                  onClick={handleIncrement}
+                  className="text-gray-600 hover:text-green-600 transition"
+                >
+                  <CiCirclePlus className="text-2xl" />
+                </button>
+              </div>
+            </div>
+            <div className="flex gap-3 w-full justify-center">
+              <button
+                onClick={handleGotoCart}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition w-28 text-sm font-medium"
+              >
                 Go to Cart
               </button>
-              <div className="flex items-center mt-3 gap-3">
-                <div className="flex items-center gap-2 px-3 py-1">
-                  <button
-                    onClick={handleDecrement}
-                    className="text-gray-700 hover:text-red-500 transition"
-                  >
-                    <CiCircleMinus className="text-2xl" />
-                  </button>
-
-                  <span className="w-6 text-center font-semibold text-gray-800">
-                    {qty}
-                  </span>
-
-                  <button
-                    onClick={handleIncrement}
-                    className="text-gray-700 hover:text-green-600 transition"
-                  >
-                    <CiCirclePlus className="text-2xl" />
-                  </button>
-                </div>
-              </div>
-
-            </div> :
+              <button
+                onClick={handleBuyNow}
+                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition w-28 text-sm font-medium"
+              >
+                Buy Now
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="flex gap-3 w-full justify-center">
             <button
-              className="mt-3 px-3 bg-blue-600 text-white py-2 
-              rounded hover:bg-blue-700 transition w-32"
-              onClick={handleAddToCart}>
+              onClick={handleAddToCart}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition w-32 text-sm font-medium"
+            >
               Add to Cart
             </button>
-        }
-        <button
-          className="mt-3 px-3 bg-green-600 text-white 
-          py-2 rounded hover:bg-green-700 transition w-32"
-          onClick={handleBuyNow}>
-          Buy Now
-        </button>
+            <button
+              onClick={handleBuyNow}
+              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition w-32 text-sm font-medium"
+            >
+              Buy Now
+            </button>
+          </div>
+        )}
       </div>
+
     </div>
   );
 };
